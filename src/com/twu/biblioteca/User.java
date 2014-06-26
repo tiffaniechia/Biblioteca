@@ -38,4 +38,11 @@ public class User {
    public int getPhoneNumber(){
        return phoneNumber;
    }
+
+    @Override
+    public String toString() {
+        return  " Name : " + userName + "\n" +
+                " Email Address : " + emailAddress + '\n' +
+                " Phone Number : " + phoneNumber ;
+    }
 }
