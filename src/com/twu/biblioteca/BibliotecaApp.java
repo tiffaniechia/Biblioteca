@@ -1,6 +1,8 @@
 package com.twu.biblioteca;
 
 
+import com.twu.biblioteca.exceptions.NeedToBeLoggedInError;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,13 +17,13 @@ public class BibliotecaApp {
     private Books books;
     private User currentUser;
 
-    public BibliotecaApp(Books books, Movies movies, Users users){
+    public BibliotecaApp(Books books, Movies movies, Users users) {
         this.movies = movies;
         this.books = books;
         this.users = users;
     }
 
-    public BibliotecaApp(){
+    public BibliotecaApp() {
         movies = new Movies();
         users = new Users();
         books = new Books();
@@ -29,9 +31,9 @@ public class BibliotecaApp {
 
     public static void main(String[] args) {
         // setting up variables to test on console
-        String firstInputChoice= "";
+        String firstInputChoice = "";
         Book books1 = new Book("harry potter", "jk rowling", 1997);
-        Movie movie1 = new Movie("hp movie",1997,"director",10);
+        Movie movie1 = new Movie("hp movie", 1997, "director", 10);
         Books books = new Books();
         Movies movies = new Movies();
 
@@ -43,65 +45,106 @@ public class BibliotecaApp {
         users.registerNewUser(new User("1", "pass", "1", "email", 1));
 
         BibliotecaApp app = new BibliotecaApp(books, movies, users);
+        app.run();
+    }
 
+    private void run() {
         while (true) {
-            System.out.println(app.welcomeMessage());
-            System.out.println(app.menuOptions());
+            System.out.println(welcomeMessage());
+            System.out.println(menuOptions());
             System.out.print("> ");
-            String command = new Scanner(System.in).nextLine();
-            if (command.equals("q")) {
-                break;
-            } else if(command.equals("0")){
-                System.out.print("Login!!\nEnter your libraryID: ");
-                String libraryID = new Scanner(System.in).nextLine();
-                System.out.print("Enter your password: ");
-                String password = new Scanner(System.in).nextLine();
 
-                User selectedUser = users.getUserInformation(libraryID);
-                if(selectedUser.getPassword().equals(password)){
-                    app.currentUser = selectedUser;
-                }else{
-                    System.out.print("Invalid login details");
-                }
-            } else if (command.equals("1")){
-                System.out.println("Showing list of books");
-                System.out.println(books);
-                System.out.print("enter the title of the book you want to borrowItem: ");
+            String command = readLine();
 
-                String bookTitle = new Scanner(System.in).nextLine();
-                System.out.println("Borrowing book " + bookTitle);
-                books.checkOut(bookTitle);
-            } else if(command.equals("3")){
-                System.out.println(books);
-                System.out.print("enter the title of the book you want to return: ");
-
-                String bookTitle = new Scanner(System.in).nextLine();
-                System.out.println("Returning book " + bookTitle);
-                books.checkIn(bookTitle);
-            } else if(command.equals("2")){
-                System.out.println("Showing list of movies");
-                System.out.println(movies);
-                System.out.print("enter the title of the movie you want to borrowItem: ");
-
-                String movieTitle = new Scanner(System.in).nextLine();
-                System.out.println("Borrowing book " + movieTitle);
-                movies.checkOut(movieTitle);
-            }  else if(command.equals("4")) {
-                System.out.println(movies);
-                System.out.print("enter the title of the movie you want to return: ");
-
-                String movieTitle = new Scanner(System.in).nextLine();
-                System.out.println("Returning book " + movieTitle);
-                movies.checkIn(movieTitle);
-            }  else if (command.equals("5")){
-                if(app.currentUser == null){
-                    System.out.println("You have to be logged in to see this section");
-                }else {
-                    System.out.println(app.currentUser.toString());
-                }
+            try {
+                runCommand(command);
+            } catch (RuntimeException ex) {
+                System.out.println(ex.getMessage());
             }
         }
+    }
 
+    private void runCommand(String command) {
+        if (command.equals("q")) {
+            System.exit(0);
+        } else if (command.equals("0")) {
+            loginAction();
+        } else if (command.equals("1")) {
+            borrowBookAction();
+        } else if (command.equals("3")) {
+            returnBookAction();
+        } else if (command.equals("2")) {
+            borrowMovieAction();
+        } else if (command.equals("4")) {
+            returnMovieAction();
+        } else if (command.equals("5")) {
+            printUserDetailsAction();
+        }
+    }
+
+    private void printUserDetailsAction() {
+        if (userHasNotLoggedIn()) {throw new NeedToBeLoggedInError();}
+        System.out.println(currentUser.toString());
+    }
+
+    private boolean userHasNotLoggedIn() {
+        return currentUser == null;
+    }
+
+    private void returnMovieAction() {
+        System.out.println(movies);
+        System.out.print("enter the title of the movie you want to return: ");
+
+        String movieTitle = readLine();
+        System.out.println("Returning movie " + movieTitle);
+        movies.checkIn(movieTitle);
+    }
+
+    private void borrowMovieAction() {
+        System.out.println("Showing list of movies");
+        System.out.println(movies);
+        System.out.print("enter the title of the movie you want to borrowItem: ");
+
+        String movieTitle = readLine();
+        System.out.println("Borrowing movie " + movieTitle);
+        movies.checkOut(movieTitle);
+    }
+
+    private void returnBookAction() {
+        System.out.println(books);
+        System.out.print("enter the title of the book you want to return: ");
+
+        String bookTitle = readLine();
+        System.out.println("Returning book " + bookTitle);
+        books.checkIn(bookTitle);
+    }
+
+    private void borrowBookAction() {
+        System.out.println("Showing list of books");
+        System.out.println(books);
+        System.out.print("enter the title of the book you want to borrowItem: ");
+
+        String bookTitle = readLine();
+        System.out.println("Borrowing book " + bookTitle);
+        books.checkOut(bookTitle);
+    }
+
+    private void loginAction() {
+        System.out.print("Login!!\nEnter your libraryID: ");
+        String libraryID = readLine();
+        System.out.print("Enter your password: ");
+        String password = readLine();
+
+        User selectedUser = users.getUserInformation(libraryID);
+        if (selectedUser.getPassword().equals(password)) {
+            currentUser = selectedUser;
+        } else {
+            System.out.print("Invalid login details");
+        }
+    }
+
+    private String readLine() {
+        return new Scanner(System.in).nextLine();
     }
 
     public String welcomeMessage() {
@@ -109,7 +152,7 @@ public class BibliotecaApp {
     }
 
     public String menuOptions() {
-        return  "Hit 0 to login\n" +
+        return "Hit 0 to login\n" +
                 "Hit 1 to borrow a book & see list of books\n" +
                 "Hit 2 to borrow a movie & see list of movies\n" +
                 "Hit 3 to return a book\n" +
@@ -118,33 +161,4 @@ public class BibliotecaApp {
                 "Hit q to quit";
     }
 
-    public String userFirstInput() {
-        Scanner firstInput = new Scanner(System.in);
-        String firstInputResult = firstInput.nextLine();
-        return firstInputResult;
-    }
-//
-//    public String ShowUserInformation(String s) {
-//        return Users.getUserInformation(s);
-//        return null;
-//    }
-//
-//    public String logInLibNumInput(){
-//        System.out.println("Please enter your library number");
-//        Scanner loginLibNumInput = new Scanner(System.in);
-//        String loginLibNumInputResult = loginLibNumInput.nextLine();
-//        return loginLibNumInputResult;
-//    }
-//
-//    public String logInPassInput(){
-//        System.out.println("Please enter your password");
-//        Scanner loginPassInput = new Scanner(System.in);
-//        String loginPassInputResult = loginPassInput.nextLine();
-//        return loginPassInputResult;
-//    }
-//
-//    public boolean logIn(String loginLibNumInputResult, String loginPassInputResult){
-//        User user = users.getUserInformation(loginLibNumInputResult);
-//        return user.getPassword().equals(loginPassInputResult);
-//    }
 }
