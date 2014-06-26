@@ -56,7 +56,7 @@ public class UsersTest {
             users.getUserInformation("NonExistentLibraryID");
             fail();
         } catch (NonExistentLibraryIDError ex) {
-            assertEquals("No user id", ex.getMessage());
+            assertEquals("No such library ID", ex.getMessage());
         }
     }
     //similar to previous method!

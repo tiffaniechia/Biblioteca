@@ -1,43 +1,45 @@
 package com.twu.biblioteca;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 /**
- * Created by tiffaniechia on 19/06/2014.
- */
+* Created by tiffaniechia on 19/06/2014.
+*/
 public class BibliotecaApp {
 
     private Users users;
     private Movies movies;
+    private Books books;
 
-    public BibliotecaApp() {
-        this.users = new Users();
-        this.movies = new Movies();
-    }
-
-    public BibliotecaApp(Users users) {
-        this.users = users;
-        this.movies = new Movies();
-    }
-
-    public BibliotecaApp(Movies movies) {
-        this.users = new Users();
+    public BibliotecaApp(Books books, Movies movies, Users users){
         this.movies = movies;
+        this.books = books;
+        this.users = users;
     }
 
+    public BibliotecaApp(){
+        movies = new Movies();
+        users = new Users();
+        books = new Books();
+    }
 
     public static void main(String[] args) {
         // setting up variables to test on console
         String firstInputChoice= "";
-        BooksDatabase books1 = new BooksDatabase("harry potter", "jk rowling", 1997);
+        Book books1 = new Book("harry potter", "jk rowling", 1997);
         Movie movie1 = new Movie("hp movie",1997,"director",10);
         Books books = new Books();
         Movies movies = new Movies();
-        books.checkIn(books1.getTitle());
+
+        books.checkIn(books1);
         movies.checkInMovieTitle(movie1);
-        BibliotecaApp app = new BibliotecaApp();
+
+        Users users = new Users();
+
+        BibliotecaApp app = new BibliotecaApp(books, movies, users);
 
 
         System.out.println(app.welcomeMessage());
@@ -99,7 +101,11 @@ public class BibliotecaApp {
 
     public List showListOfBooks() {
        System.out.println("These are the available books");
-       return Books.availableBooksList;
+       ArrayList<String> names = new ArrayList<String>();
+       for(Book book:books.availableBooksList){
+            names.add(book.getTitle());
+        }
+       return names;
     }
 
     public String userSecondInput() {
@@ -109,13 +115,14 @@ public class BibliotecaApp {
     }
 
     public String showBookInformation(String secondInputResult) {
-        if (BooksDatabase.getTitle().equals(secondInputResult)){
-            return (BooksDatabase.getAuthor() + ", " + BooksDatabase.getPublishedDate()).toString();
-        }else{
-            System.out.println("Book not found, system exit");
-            System.exit(0);
-            return "";
+        for(Book book:books.availableBooksList){
+            if(book.getTitle().equals(secondInputResult)){
+                return book.toString();
+            }
         }
+        System.out.println("Book not found, system exit");
+        System.exit(0);
+        return "";
     }
 
     public String bookActionOptions() {
@@ -135,8 +142,7 @@ public class BibliotecaApp {
 
     public String readThirdInputBooks(String thirdInputResult, String secondInputResult) {
         if (thirdInputResult.equals("1")) {
-            Object resultToObject = secondInputResult;
-            return Books.checkOut(resultToObject);
+            return books.checkOut(secondInputResult);
         } else if (thirdInputResult.equals("q")) {
             System.exit(0);
             return "";
@@ -145,20 +151,25 @@ public class BibliotecaApp {
         }
     }
 
-
     public List showListOfMovies() {
         System.out.println("These are the available movies");
-        return movies.availableMoviesList;
+        ArrayList<String> names = new ArrayList<String>();
+        for(Movie movie:movies.availableMoviesList){
+           names.add(movie.getName());
+        }
+        return names;
     }
 
-    public String showMovieInformation(String movieTitle) {
-//        if (Movie.getName().equals(movieTitle)){
-//            return (Movie.getName() + ", "+ Movie.getYear() + " by " + Movie.getDirector()+" with rating of "+ Movie.getRating()).toString();
-//        }else{
-//            System.out.println("Movie not found, system exit");
-//            System.exit(0);
-            return "";
-//        }
+    public String showMovieInformation(String secondInputResult) {
+        for(Movie movie:movies.availableMoviesList){
+            if(movie.getName().equals(secondInputResult)){
+                return movie.toString();
+            }
+        }
+        System.out.println("Movie not found, system exit");
+        System.exit(0);
+        return "";
+
     }
 
     public String readThirdInputMovies(String thirdInputResult, String secondInputResult) {

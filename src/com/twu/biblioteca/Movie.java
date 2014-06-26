@@ -1,20 +1,23 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.exceptions.LibraryItemAlreadyBorrowedError;
+
 /**
  * Created by tiffaniechia on 24/06/2014.
  */
-public class Movie {
+public class Movie extends LibraryItem {
 
-    public String name;
-    public int year;
-    public String director;
-    public int rating;
+    String name;
+    int year;
+    String director;
+    int rating;
 
     public Movie(String name, int year, String director, int rating){
         this.name = name;
         this.year = year;
         this.director = director;
         this.rating = rating;
+        this.borrowedStatus = false;
     }
 
     public String getName(){
@@ -37,4 +40,6 @@ public class Movie {
     public String toString() {
         return name + " | " + director + " | " + year + " | " + rating + "/10";
     }
+
+
 }

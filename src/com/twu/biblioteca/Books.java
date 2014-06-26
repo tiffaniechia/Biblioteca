@@ -8,30 +8,28 @@ import java.util.List;
  */
 public class Books {
 
-    public static List<String> availableBooksList = new ArrayList<String>();
-
-    Books(){
-    }
+   public List<Book> availableBooksList = new ArrayList<Book>();
 
    public int arrayCount(){
         return availableBooksList.size();
     }
 
-    public static String checkIn(String t) {
-        if (availableBooksList.add(t)){
-            return "Thank you for returning the book";
-        }else{
-            return "That is not a valid book to return";
-        }
+    public void checkIn(Book book) {
+        availableBooksList.add(book);
+        System.out.println("Thank you for returning the book");
     }
 
-    public static String checkOut(Object s) {
-        if(availableBooksList.contains(s)){
-            availableBooksList.remove(s);
-            return "Thank you! Enjoy the book";
-        }else{
-            return "That book is not available";
-        }
+    public String checkOut(String bookTitle) {
+
+        for(Book book:availableBooksList){
+            if(book.getTitle().equals(bookTitle)){
+                book.borrow();
+                return "Thank you! Enjoy the book";
+            }
+        }return "That book is not available";
+
+
     }
+
 
 }
