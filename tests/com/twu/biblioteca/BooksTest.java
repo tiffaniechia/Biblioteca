@@ -17,42 +17,36 @@ public class BooksTest {
     }
 
     @Test
-    public void booksCountShouldStartWithZero(){
+    public void booksCountShouldStartWithZero() {
         Books book = new Books();
         int result = book.arrayCount();
-        assertEquals(0,result);
+        assertEquals(0, result);
     }
 
     @Test
-    public void shouldShowSuccessfulCheckOutMessage(){
+    public void shouldShowSuccessfulCheckOutMessage() {
         Books books = new Books();
-        Book book = new Book("my little pony","author",123);
+        Book book = new Book("my little pony", "author", 123);
         books.registerBook(book);
-        String result = books.checkOut("my little pony");
-        assertEquals("Thank you! Enjoy the book", result);
+        books.checkOut("my little pony");
+        assertTrue(book.isBorrowed());
     }
 
     @Test
-    public void shouldShowUnSuccessfulCheckOutMessage(){
+    public void shouldShowUnSuccessfulCheckOutMessage() {
         Books books = new Books();
-        Book book = new Book("my little pony","author",123);
-        String result = books.checkOut("my little pony");
-        assertEquals("That book is not available", result);
+        Book book = new Book("my little pony", "author", 123);
+        books.checkOut("my little pony");
+        assertFalse(book.isBorrowed());
     }
 
     @Test
-    public void shouldBeAbleToReturnBooks(){
+    public void shouldBeAbleToReturnBooks() {
         Books books = new Books();
-        Book book = new Book("my little pony","author",123);
+        Book book = new Book("my little pony", "author", 123);
         books.registerBook(book);
         int result = books.arrayCount();
-        assertEquals(1,result);
+        assertEquals(1, result);
     }
-//        Books book1 = new Books();
-//        Books book2 = new Books();
-//        book1.registerBook("whirlwind");
-//        book2.registerBook("avengers");
-//        List result = Books.availableBooksList;
-//        assertEquals(Arrays.asList(new String[]{"whirlwind", "avengers"}), result);
-//    }
+
 }

@@ -38,7 +38,7 @@ public class Movie extends LibraryItem {
 
     @Override
     public String toString() {
-        return name + " | " + director + " | " + year + " | " + rating + "/10";
+        return name + " | " + director + " | " + year + " | " + rating + "/10" + " | " + (borrowedStatus?"Borrowed":"Available");
     }
 
 

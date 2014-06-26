@@ -1,5 +1,7 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.exceptions.NonExistentItemError;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,38 +10,40 @@ import java.util.List;
  */
 public class Books {
 
-   public List<Book> availableBooksList = new ArrayList<Book>();
+   public List<Book> booksList = new ArrayList<Book>();
 
    public int arrayCount(){
-        return availableBooksList.size();
+        return booksList.size();
     }
 
     public void registerBook(Book book) {
-        availableBooksList.add(book);
+        booksList.add(book);
         System.out.println("Thank you for returning the book");
     }
 
-    public void checkInBook(String bookTitle){
-        for(Book book:availableBooksList){
+    private Book findBookWithTitle(String bookTitle){
+        for(Book book: booksList){
             if(book.getTitle().equals(bookTitle)){
-                book.returnBook();
+                return book;
             }
         }
+        throw new NonExistentItemError();
     }
 
-    public String checkOut(String bookTitle) {
-        for(Book book:availableBooksList){
-            if(book.getTitle().equals(bookTitle)){
-                book.borrow();
-                return "Thank you! Enjoy the book";
-            }
-        }return "That book is not available";
+    public void checkIn(String bookTitle){
+        Book selectedBook = findBookWithTitle(bookTitle);
+        selectedBook.returnItem();
+    }
+
+    public void checkOut(String bookTitle) {
+        Book selectedBook = findBookWithTitle(bookTitle);
+        selectedBook.borrowItem();
     }
 
     @Override
     public String toString() {
         String result = "";
-        for (Book book: availableBooksList){
+        for (Book book: booksList){
             result += book.toString() + "\n";
         }
         return result;

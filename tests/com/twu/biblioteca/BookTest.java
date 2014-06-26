@@ -24,26 +24,26 @@ public class BookTest {
 
     @Test
     public void testBorrow_shouldChangeTheStatusToBorrowed() throws Exception {
-        book.borrow();
+        book.borrowItem();
         assertTrue(book.isBorrowed());
     }
 
     @Test(expected = LibraryItemAlreadyBorrowedError.class)
     public void testBorrow_shouldThrowAnErrorIfBookIsAlreadyBorrowed() throws Exception {
         book.borrowedStatus = true;
-        book.borrow();
+        book.borrowItem();
     }
 
     @Test
     public void testReturn_shouldChangeStatusToFalse() throws Exception {
         book.borrowedStatus = true;
-        book.returnBook();
+        book.returnItem();
         assertFalse(book.isBorrowed());
     }
 
     @Test(expected = LibraryItemNotBorrowedError.class)
     public void testReturn_shouldThrowErrorIfBookHasNotBeenBorrowed() throws Exception {
         book.borrowedStatus = false;
-        book.returnBook();
+        book.returnItem();
     }
 }

@@ -17,14 +17,14 @@ public class LibraryItem {
         this.borrowedStatus = false;
     }
 
-    public void borrow(){
+    public void borrowItem(){
         if(borrowedStatus) {
             throw new LibraryItemAlreadyBorrowedError();
         }
         borrowedStatus = true;
     }
 
-    public void returnBook() {
+    public void returnItem() {
         if (!borrowedStatus) { throw new LibraryItemNotBorrowedError(); }
         borrowedStatus = false;
     }

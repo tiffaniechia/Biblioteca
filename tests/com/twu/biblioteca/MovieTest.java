@@ -1,7 +1,6 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.exceptions.LibraryItemAlreadyBorrowedError;
-import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,14 +26,14 @@ public class MovieTest {
 
     @Test
     public void testBorrowed_whenBorrowedStatusShouldBeTrue() throws Exception {
-        movie.borrow();
+        movie.borrowItem();
         assertTrue(movie.isBorrowed());
     }
 
     @Test(expected = LibraryItemAlreadyBorrowedError.class)
     public void testBorrowed_throwErrorIfBookIsAlreadyBorrowed() throws Exception {
         movie.borrowedStatus = true;
-        movie.borrow();
+        movie.borrowItem();
     }
 
 

@@ -31,7 +31,7 @@ public class Book extends LibraryItem {
     //boolean preferable to is is_ rather than get_
 
     //    Similar unrefactored version of the one before, always better to run a positive than a negatice
-//      public void borrow(){
+//      public void borrowItem(){
 //        if(!borrowedStatus) {
 //            borrowedStatus = true;
 //        } else {
