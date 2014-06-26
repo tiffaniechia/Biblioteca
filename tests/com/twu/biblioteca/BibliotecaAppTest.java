@@ -44,7 +44,7 @@ public class BibliotecaAppTest {
     @Test
     public void shouldShowListOfBooks(){
         Book book = new Book("my little pony","author",123);
-        books.checkIn(book);
+        books.registerBook(book);
         List result = app.showListOfBooks();
         assertEquals(Arrays.asList(new String[]{"my little pony"}), result);
     }
@@ -52,7 +52,7 @@ public class BibliotecaAppTest {
     @Test
     public void shouldGetBookInformation(){
         Book book = new Book("harry potter", "JK Rowling", 1997);
-        books.checkIn(book);
+        books.registerBook(book);
         String result = app.showBookInformation("harry potter");
         assertEquals("JK Rowling, 1997", result);
     }

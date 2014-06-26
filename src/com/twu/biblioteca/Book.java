@@ -42,6 +42,6 @@ public class Book extends LibraryItem {
 
     @Override
     public String toString() {
-        return author+", "+ publishedDate;
+        return title+ " | "+ author+" | "+ publishedDate + " | " + (borrowedStatus?"Borrowed":"Available");
     }
 }

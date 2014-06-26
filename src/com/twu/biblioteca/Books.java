@@ -14,22 +14,34 @@ public class Books {
         return availableBooksList.size();
     }
 
-    public void checkIn(Book book) {
+    public void registerBook(Book book) {
         availableBooksList.add(book);
         System.out.println("Thank you for returning the book");
     }
 
-    public String checkOut(String bookTitle) {
+    public void checkInBook(String bookTitle){
+        for(Book book:availableBooksList){
+            if(book.getTitle().equals(bookTitle)){
+                book.returnBook();
+            }
+        }
+    }
 
+    public String checkOut(String bookTitle) {
         for(Book book:availableBooksList){
             if(book.getTitle().equals(bookTitle)){
                 book.borrow();
                 return "Thank you! Enjoy the book";
             }
         }return "That book is not available";
-
-
     }
 
-
+    @Override
+    public String toString() {
+        String result = "";
+        for (Book book: availableBooksList){
+            result += book.toString() + "\n";
+        }
+        return result;
+    }
 }

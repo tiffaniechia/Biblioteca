@@ -3,10 +3,6 @@ package com.twu.biblioteca;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.Assert.*;
 
 public class BooksTest {
@@ -31,7 +27,7 @@ public class BooksTest {
     public void shouldShowSuccessfulCheckOutMessage(){
         Books books = new Books();
         Book book = new Book("my little pony","author",123);
-        books.checkIn(book);
+        books.registerBook(book);
         String result = books.checkOut("my little pony");
         assertEquals("Thank you! Enjoy the book", result);
     }
@@ -48,14 +44,14 @@ public class BooksTest {
     public void shouldBeAbleToReturnBooks(){
         Books books = new Books();
         Book book = new Book("my little pony","author",123);
-        books.checkIn(book);
+        books.registerBook(book);
         int result = books.arrayCount();
         assertEquals(1,result);
     }
 //        Books book1 = new Books();
 //        Books book2 = new Books();
-//        book1.checkIn("whirlwind");
-//        book2.checkIn("avengers");
+//        book1.registerBook("whirlwind");
+//        book2.registerBook("avengers");
 //        List result = Books.availableBooksList;
 //        assertEquals(Arrays.asList(new String[]{"whirlwind", "avengers"}), result);
 //    }

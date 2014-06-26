@@ -34,46 +34,67 @@ public class BibliotecaApp {
         Books books = new Books();
         Movies movies = new Movies();
 
-        books.checkIn(books1);
+        books.registerBook(books1);
+        books.registerBook(new Book("Book number 2", "duo", 2014));
         movies.checkInMovieTitle(movie1);
 
         Users users = new Users();
 
         BibliotecaApp app = new BibliotecaApp(books, movies, users);
 
+        while (true) {
+            System.out.println(app.welcomeMessage());
+            System.out.println(app.menuOptions());
+            System.out.print("> ");
+            String command = new Scanner(System.in).nextLine();
+            if (command.equals("q")) {
+                break;
+            } else if (command.equals("1")){
+                System.out.println("Showing list of books");
+                System.out.println(books);
+                System.out.print("enter the title of the book you want to borrow: ");
 
-        System.out.println(app.welcomeMessage());
-        System.out.println(app.menuOptions());
-        firstInputChoice = app.userFirstInput();
-        System.out.println(app.readFirstInput(firstInputChoice));
-        String secondInputChoice = app.userSecondInput();
-        if (firstInputChoice.equals("1")) {
-            System.out.println(app.showBookInformation(secondInputChoice));
-            System.out.println(app.bookActionOptions());
-        }else if(firstInputChoice.equals("2")){
-            System.out.println(app.showMovieInformation(secondInputChoice));
-            System.out.println(app.movieActionOptions());
-        }else{
-            System.out.println("unexpected error");
-        }
-        String thirdInputChoice = app.userThirdInput();
-        if (firstInputChoice.equals("1")) {
-            System.out.println(app.readThirdInputBooks(thirdInputChoice, secondInputChoice));
-        }else if(firstInputChoice.equals("2")) {
-            System.out.println(app.readThirdInputMovies(thirdInputChoice, secondInputChoice));
-        }else{
-            System.out.println("unexpected error");
-        }
+                String bookTitle = new Scanner(System.in).nextLine();
+                System.out.println("Borrowing book " + bookTitle);
+                books.checkOut(bookTitle);
+            } else if(command.equals("3")){
+                System.out.println(books);
+                System.out.print("enter the title of the book you want to return: ");
 
+                String bookTitle = new Scanner(System.in).nextLine();
+                System.out.println("Returning book " + bookTitle);
+                books.checkInBook(bookTitle);
+
+            }
+        }
+//        firstInputChoice = app.userFirstInput();
+//        System.out.println(app.readFirstInput(firstInputChoice));
+//        String secondInputChoice = app.userSecondInput();
+//        if (firstInputChoice.equals("1")) {
+//            System.out.println(app.showBookInformation(secondInputChoice));
+//            System.out.println(app.bookActionOptions());
+//        }else if(firstInputChoice.equals("2")){
+//            System.out.println(app.showMovieInformation(secondInputChoice));
+//            System.out.println(app.movieActionOptions());
+//        }else{
+//            System.out.println("unexpected error");
+//        }
+//        String thirdInputChoice = app.userThirdInput();
+//        if (firstInputChoice.equals("1")) {
+//            System.out.println(app.readThirdInputBooks(thirdInputChoice, secondInputChoice));
+//        }else if(firstInputChoice.equals("2")) {
+//            System.out.println(app.readThirdInputMovies(thirdInputChoice, secondInputChoice));
+//        }else{
+//            System.out.println("unexpected error");
+//        }
     }
-
 
     public String welcomeMessage() {
         return "Welcome to Biblioteca";
     }
 
     public String menuOptions() {
-        return "Hit 1 for list of books\nHit 2 to view list of movies\nHit q to quit";
+        return "Hit 1 for list of books\nHit 2 to view list of movies\nHit 3 to return a book\nHit q to quit";
     }
 
     public String userFirstInput() {
@@ -92,12 +113,11 @@ public class BibliotecaApp {
         }else if(firstInputResult.equals("2")){
             System.out.println(showListOfMovies());
             return "Type the title of the movie to perform an action or to learn more";
+
         }else {
             return "Select a valid option!";
         }
     }
-
-
 
     public List showListOfBooks() {
        System.out.println("These are the available books");
@@ -132,7 +152,6 @@ public class BibliotecaApp {
     public String movieActionOptions() {
         return "\nHit 1 to checkout this movie\nHit q to quit";
     }
-
 
     public String userThirdInput() {
         Scanner thirdInput = new Scanner(System.in);
@@ -169,7 +188,6 @@ public class BibliotecaApp {
         System.out.println("Movie not found, system exit");
         System.exit(0);
         return "";
-
     }
 
     public String readThirdInputMovies(String thirdInputResult, String secondInputResult) {
@@ -188,7 +206,6 @@ public class BibliotecaApp {
         return null;
     }
 
-
     public String logInLibNumInput(){
         System.out.println("Please enter your library number");
         Scanner loginLibNumInput = new Scanner(System.in);
@@ -202,7 +219,6 @@ public class BibliotecaApp {
         String loginPassInputResult = loginPassInput.nextLine();
         return loginPassInputResult;
     }
-
 
     public boolean logIn(String loginLibNumInputResult, String loginPassInputResult){
         User user = users.getUserInformation(loginLibNumInputResult);
